@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         VK Tools Widget
 // @namespace    http://tampermonkey.net/
-// @version      1.7
+// @version      1.8
 // @description  A tool to remove blur/restrictions and add quick shortcut buttons to VK channels (smart ID extraction).
 // @author       Abdalrahman Saad
-// @icon         https://raw.githubusercontent.com/3bd2lra7man/vk-tools-widget/main/logo.svg
 // @homepageURL  https://github.com/3bd2lra7man/vk-tools-widget
 // @updateURL    https://github.com/3bd2lra7man/vk-tools-widget/raw/refs/heads/main/vk-tools.user.js
 // @downloadURL  https://github.com/3bd2lra7man/vk-tools-widget/raw/refs/heads/main/vk-tools.user.js
+// @icon         https://raw.githubusercontent.com/3bd2lra7man/vk-tools-widget/main/logo.svg
 // @match        *://*.vk.com/*
 // @match        *://*.vkvideo.ru/*
 // @grant        GM_addStyle
@@ -365,4 +365,16 @@
         setInterval(() => {
             const currentUrl = location.href;
             if (currentUrl !== lastUrl) {
-                lastUrl =
+                lastUrl = currentUrl;
+                checkUrlAndToggleButtons();
+            }
+        }, 1000);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', createUI);
+    } else {
+        createUI();
+    }
+
+})();
