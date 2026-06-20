@@ -20,9 +20,9 @@
 1. Install a userscript manager extension like [Tampermonkey](https://www.tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/).
 2. Click the link below to install the script directly:
 
-   👉 **[Install VK Tools Script](https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPOSITORY_NAME/main/vk-tools.user.js)**
+   👉 **[Install VK Tools Script](https://github.com/3bd2lra7man/vk-tools-widget/raw/refs/heads/main/vk-tools.user.js)**
 
-   *(Note: Replace `YOUR_USERNAME` and `YOUR_REPOSITORY_NAME` with your actual GitHub details).*
+   
 3. Confirm the installation in your userscript manager.
 
 ## 💻 Usage
@@ -36,6 +36,4 @@
 
 ## 📸 Screenshots
 
-*(Upload a screenshot of the widget to your repository and replace the link below)* ![VK Tools Widget UI](screenshot.png)
-
-## 📜 License
+![VK Tools Widget UI](screenshot.png)
