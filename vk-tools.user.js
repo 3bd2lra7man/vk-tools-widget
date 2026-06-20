@@ -1,8 +1,11 @@
 // ==UserScript==
-// @name         Vk tools
+// @name         VK Tools Widget
 // @namespace    http://tampermonkey.net/
-// @version      1.6
-// @description  أداة لإزالة التشويش والقيود مع أزرار اختصار للوصول السريع لقنوات VK (استخراج ذكي للمعرف).
+// @version      1.7
+// @description  A tool to remove blur/restrictions and add quick shortcut buttons to VK channels (smart ID extraction).
+// @homepageURL  https://github.com/3bd2lra7man/vk-tools-widget
+// @updateURL    https://github.com/3bd2lra7man/vk-tools-widget/raw/refs/heads/main/vk-tools.user.js
+// @downloadURL  https://github.com/3bd2lra7man/vk-tools-widget/raw/refs/heads/main/vk-tools.user.js
 // @match        *://*.vk.com/*
 // @match        *://*.vkvideo.ru/*
 // @grant        GM_addStyle
@@ -15,7 +18,7 @@
     'use strict';
 
     // ==========================================
-    // 1. نظام حقن وإزالة CSS الخاص بفك التقييد
+    // 1. CSS injection and removal for restriction bypass
     // ==========================================
     const BLUR_STYLE_ID = 'vk-tools-blur-remover-style';
 
@@ -44,17 +47,17 @@
     }
 
     // ==========================================
-    // 2. وظائف استخراج المعرف والانتقال (تم التحديث للذكاء المزدوج)
+    // 2. Channel ID extraction and navigation
     // ==========================================
     function extractChannelId() {
-        // 1. المحاولة الأولى: استخراج المعرف من رابط الصفحة (URL) إذا كان بصيغة /@...
+        // Attempt 1: Extract from URL if it matches /@...
         const path = window.location.pathname;
-        const urlMatch = path.match(/^\/@([^/]+)/); // يبحث عن /@ ويستخرج ما بعده حتى علامة / التالية
+        const urlMatch = path.match(/^\/@([^/]+)/);
         if (urlMatch && urlMatch[1]) {
-            return urlMatch[1]; // سيعيد مثلاً: club153519719
+            return urlMatch[1];
         }
 
-        // 2. المحاولة الثانية: استخراج المعرف من عناصر الصفحة (DOM) إذا لم يكن موجوداً في الرابط
+        // Attempt 2: Extract from DOM if not found in URL
         const links = document.querySelectorAll('div[data-testid="video_owner_container"] a[href][data-testid="video_owner"]');
         if (links.length > 0) {
             const href = links[0].getAttribute('href');
@@ -64,7 +67,7 @@
             }
         }
 
-        alert('❌ لم يتم العثور على مُعرّف القناة في الرابط أو في هذه الصفحة.');
+        alert('❌ Channel ID not found in the URL or on this page.');
         return null;
     }
 
@@ -79,7 +82,7 @@
     }
 
     // ==========================================
-    // 3. بناء واجهة المستخدم (Shadow DOM)
+    // 3. UI Construction (Shadow DOM)
     // ==========================================
     function createUI() {
         const isEnabled = GM_getValue('vk_blur_bypass_enabled', true);
@@ -97,7 +100,7 @@
         wrapper.style.display = isUiHidden ? 'none' : 'block';
 
         if (savedLeft && savedTop) {
-            wrapper.style.right = 'auto';
+            wrapper.style.right = 'auto'; 
             wrapper.style.left = savedLeft;
             wrapper.style.top = savedTop;
         }
@@ -108,7 +111,7 @@
                 .vk-tools-widget {
                     position: fixed;
                     top: 20px;
-                    right: 20px;
+                    right: 20px; 
                     background: #202020;
                     color: #e0e0e0;
                     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -128,11 +131,11 @@
                     align-items: center;
                     border-top-left-radius: 8px;
                     border-top-right-radius: 8px;
-                    cursor: grab;
+                    cursor: grab; 
                 }
 
                 .header:active {
-                    cursor: grabbing;
+                    cursor: grabbing; 
                 }
 
                 .close-btn {
@@ -153,7 +156,7 @@
                 .title-container {
                     display: flex;
                     align-items: center;
-                    gap: 8px;
+                    gap: 10px;
                     font-weight: bold;
                     font-size: 15px;
                 }
@@ -223,8 +226,25 @@
                 </div>
 
                 <div class="title-container">
-                    <svg class="icon" style="fill:#538e1a;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                    Vk tools
+                    <svg viewBox="0 0 256 256" width="24" height="24">
+                        <defs>
+                            <linearGradient id="vkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#0077FF" />
+                                <stop offset="100%" stop-color="#0055CC" />
+                            </linearGradient>
+                            <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+                                <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000000" flood-opacity="0.25"/>
+                            </filter>
+                        </defs>
+                        <rect width="256" height="256" rx="56" fill="url(#vkGrad)" />
+                        <text x="128" y="135" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="115" font-weight="900" fill="#FFFFFF" text-anchor="middle" letter-spacing="-6" filter="url(#shadow)">VK</text>
+                        <rect x="42" y="160" width="172" height="44" rx="22" fill="#252525" filter="url(#shadow)" />
+                        <rect x="42" y="160" width="172" height="44" rx="22" fill="none" stroke="#383838" stroke-width="1.5" />
+                        <text x="105" y="188" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="18" font-weight="bold" fill="#e0e0e0" text-anchor="middle" letter-spacing="4">TOOLS</text>
+                        <rect x="155" y="172" width="34" height="20" rx="10" fill="#538e1a" />
+                        <circle cx="179" cy="182" r="7" fill="#FFFFFF" />
+                    </svg>
+                    VK Tools
                 </div>
             </div>
 
@@ -257,7 +277,7 @@
         shadow.appendChild(wrapper);
         document.body.appendChild(container);
 
-        // --- ربط الأحداث ---
+        // --- Event Listeners ---
 
         shadow.getElementById('btnCloseWidget').addEventListener('click', () => {
             wrapper.style.display = 'none';
@@ -271,14 +291,14 @@
         shadow.getElementById('btnGotoChannel').addEventListener('click', gotoChannel);
         shadow.getElementById('btnGotoVideos').addEventListener('click', gotoVideos);
 
-        GM_registerMenuCommand("👁️ Show / Hide Vk tools Menu", () => {
+        GM_registerMenuCommand("👁️ Show / Hide VK Tools Menu", () => {
             const isHidden = wrapper.style.display === 'none';
             wrapper.style.display = isHidden ? 'block' : 'none';
             GM_setValue('vk_ui_hidden', !isHidden);
         });
 
         // ==========================================
-        // 4. برمجة ميزة السحب (Drag & Drop)
+        // 4. Drag & Drop Logic
         // ==========================================
         const header = shadow.getElementById('widgetHeader');
         let isDragging = false;
@@ -316,7 +336,7 @@
         });
 
         // ==========================================
-        // 5. نظام ذكي للتحقق من الرابط (تم تحديثه)
+        // 5. Smart URL Checker (SPA support)
         // ==========================================
         const btnChannel = shadow.getElementById('btnGotoChannel');
         const btnVideos = shadow.getElementById('btnGotoVideos');
@@ -325,7 +345,7 @@
             const hostname = window.location.hostname;
             const pathname = window.location.pathname;
 
-            // إظهار الأزرار إذا كان النطاق vkvideo.ru وكان المسار يبدأ بـ /video أو /@
+            // Show buttons if domain is vkvideo.ru and path starts with /video or /@
             const isValidUrl = hostname === 'vkvideo.ru' && (pathname.startsWith('/video') || pathname.startsWith('/@'));
 
             if (isValidUrl) {
@@ -343,16 +363,4 @@
         setInterval(() => {
             const currentUrl = location.href;
             if (currentUrl !== lastUrl) {
-                lastUrl = currentUrl;
-                checkUrlAndToggleButtons();
-            }
-        }, 1000);
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', createUI);
-    } else {
-        createUI();
-    }
-
-})();
+                lastUrl =
