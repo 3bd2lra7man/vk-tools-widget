@@ -3,6 +3,8 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.7
 // @description  A tool to remove blur/restrictions and add quick shortcut buttons to VK channels (smart ID extraction).
+// @author       Abdalrahman Saad
+// @icon         https://raw.githubusercontent.com/3bd2lra7man/vk-tools-widget/main/logo.svg
 // @homepageURL  https://github.com/3bd2lra7man/vk-tools-widget
 // @updateURL    https://github.com/3bd2lra7man/vk-tools-widget/raw/refs/heads/main/vk-tools.user.js
 // @downloadURL  https://github.com/3bd2lra7man/vk-tools-widget/raw/refs/heads/main/vk-tools.user.js
